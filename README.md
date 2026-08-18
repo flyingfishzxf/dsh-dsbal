@@ -1,4 +1,4 @@
-# dsh-plugin-deepseek-balance
+# dsh-dsbal
 
 [中文](./README.zh.md)
 
@@ -24,7 +24,7 @@ Once published (npm or GitHub), install from **Settings → Plugin Market**,
 or manually:
 
 ```sh
-dsh plugin --profile web add dsh-plugin-deepseek-balance
+dsh plugin --profile web add dsh-dsbal
 ```
 
 ## How it works
@@ -57,15 +57,15 @@ DeepSeek model adapter:
 
    ```json
    {
-     "name": "dsh-plugin-deepseek-balance",
+     "name": "dsh-dsbal",
      "owner": "<your-github-username>",
-     "url": "https://github.com/<your-github-username>/dsh-plugin-deepseek-balance",
+     "url": "https://github.com/<your-github-username>/dsh-dsbal",
      "category": "ui",
      "description": {
        "en": "DeepSeek API balance sidebar widget — CNY balance above Settings, 30s auto refresh, hover details, threshold warnings.",
        "zh": "DSH 侧边栏 DeepSeek 余额插件：设置按钮上方显示人民币余额，30 秒自动刷新，hover 查看明细，余额不足阈值告警。"
      },
-     "npm": "dsh-plugin-deepseek-balance"
+     "npm": "dsh-dsbal"
    }
    ```
 
