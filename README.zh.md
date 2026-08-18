@@ -12,11 +12,25 @@ DSH Web 侧边栏的 DeepSeek API 余额插件。
 
 ## 安装
 
-发布（npm 或 GitHub）后，在 **设置 → 插件市场** 中一键安装，或手动：
+直接从 GitHub 安装（当前推荐方式）：
+
+```sh
+dsh plugin --profile web add github:flyingfishzxf/dsh-dsbal
+```
+
+或者发布到 npm 后：
 
 ```sh
 dsh plugin --profile web add dsh-dsbal
 ```
+
+本地开发时也可以从本地路径安装：
+
+```sh
+dsh plugin --profile web add file:/path/to/dsh-dsbal
+```
+
+> 安装后需要重启 `dsh web` 并强制刷新浏览器，新的 bundle 才会生效。
 
 ## 工作原理
 
@@ -37,24 +51,36 @@ dsh plugin --profile web add dsh-dsbal
 
 ## 推送到插件市场
 
-1. 发布该包（npm 或托管到 GitHub）。
-2. 在 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 提 PR 增加一条记录，例如：
+目前尚未收录。插件列表由 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 维护，每个插件对应一个 YAML 文件。
 
-   ```json
-   {
-     "name": "dsh-dsbal",
-     "owner": "<你的 GitHub 用户名>",
-     "url": "https://github.com/<你的 GitHub 用户名>/dsh-dsbal",
-     "category": "ui",
-     "description": {
-       "en": "DeepSeek API balance sidebar widget — CNY balance above Settings, 30s auto refresh, hover details, threshold warnings.",
-       "zh": "DSH 侧边栏 DeepSeek 余额插件：设置按钮上方显示人民币余额，30 秒自动刷新，hover 查看明细，余额不足阈值告警。"
-     },
-     "npm": "dsh-dsbal"
-   }
+要收录本插件：
+
+1. 确保仓库满足要求：
+   - 创建满 1 天；
+   - 提交数 ≥ 10；
+   - 在 GitHub 仓库添加 `dsh-plugin` topic。
+2. Fork `awesome-dsh-plugin`。
+3. 新增 `data/plugins/flyingfishzxf__dsh-dsbal.yml`：
+
+   ```yaml
+   url: https://github.com/flyingfishzxf/dsh-dsbal
+   name: flyingfishzxf/dsh-dsbal
+   category: ui
+   description:
+     en: 'DeepSeek API balance sidebar widget for DSH Web — CNY balance above Settings, 30s auto refresh, click to refresh, hover details, threshold warnings.'
+     zh: 'DSH 侧边栏 DeepSeek 余额插件：设置按钮上方显示人民币余额，30 秒自动刷新，点击刷新，hover 查看明细，余额不足阈值告警。'
    ```
 
-市场（dshmarket）通常一天内自动收录。
+4. 重新生成 README 并与 YAML 一起提交：
+
+   ```sh
+   npm ci
+   node scripts/generate-readme.mjs
+   ```
+
+5. 发起 Pull Request。
+
+PR 合并后，dshmarket 会自动收录。
 
 ## 许可证
 

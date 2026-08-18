@@ -20,12 +20,26 @@ A DeepSeek API balance widget for the DSH web sidebar.
 
 ## Install
 
-Once published (npm or GitHub), install from **Settings → Plugin Market**,
-or manually:
+Install directly from GitHub (currently recommended):
+
+```sh
+dsh plugin --profile web add github:flyingfishzxf/dsh-dsbal
+```
+
+Or, after the package is published to npm:
 
 ```sh
 dsh plugin --profile web add dsh-dsbal
 ```
+
+For local development, you can install from a local path:
+
+```sh
+dsh plugin --profile web add file:/path/to/dsh-dsbal
+```
+
+> After installing, restart `dsh web` and hard-refresh the browser so the new
+> bundle is loaded.
 
 ## How it works
 
@@ -51,25 +65,38 @@ DeepSeek model adapter:
 
 ## Publish to the plugin market
 
-1. Publish the package (or host it on GitHub).
-2. Open a PR in [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
-   adding one entry, e.g.:
+Not listed yet. The list is maintained in
+[awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
+as one YAML file per plugin.
 
-   ```json
-   {
-     "name": "dsh-dsbal",
-     "owner": "<your-github-username>",
-     "url": "https://github.com/<your-github-username>/dsh-dsbal",
-     "category": "ui",
-     "description": {
-       "en": "DeepSeek API balance sidebar widget — CNY balance above Settings, 30s auto refresh, hover details, threshold warnings.",
-       "zh": "DSH 侧边栏 DeepSeek 余额插件：设置按钮上方显示人民币余额，30 秒自动刷新，hover 查看明细，余额不足阈值告警。"
-     },
-     "npm": "dsh-dsbal"
-   }
+To add this plugin:
+
+1. Make sure the repository meets the requirements:
+   - at least 1 day old,
+   - 10 or more commits,
+   - the `dsh-plugin` topic added on GitHub.
+2. Fork `awesome-dsh-plugin`.
+3. Add `data/plugins/flyingfishzxf__dsh-dsbal.yml`:
+
+   ```yaml
+   url: https://github.com/flyingfishzxf/dsh-dsbal
+   name: flyingfishzxf/dsh-dsbal
+   category: ui
+   description:
+     en: 'DeepSeek API balance sidebar widget for DSH Web — CNY balance above Settings, 30s auto refresh, click to refresh, hover details, threshold warnings.'
+     zh: 'DSH 侧边栏 DeepSeek 余额插件：设置按钮上方显示人民币余额，30 秒自动刷新，点击刷新，hover 查看明细，余额不足阈值告警。'
    ```
 
-The market (dshmarket) picks it up automatically, usually within a day.
+4. Regenerate the READMEs and commit them along with the YAML file:
+
+   ```sh
+   npm ci
+   node scripts/generate-readme.mjs
+   ```
+
+5. Open a pull request.
+
+The market (dshmarket) picks it up automatically after the PR is merged.
 
 ## License
 
