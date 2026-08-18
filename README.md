@@ -9,8 +9,9 @@ A DeepSeek API balance widget for the DSH web sidebar.
   button.
 - **30s auto refresh**; click the button to refresh immediately and reset the
   cycle.
-- **Hover** to open a detail card: CNY balance, USD balance, topped-up and
-  granted amounts, plus the refresh hint and last refresh time.
+- **Hover** opens a usage-notes card: the balance warning legend
+  (< 50 yellow · < 30 orange · < 10 red → dashed border on the button), the
+  refresh hint, and the last refresh time.
 - **Balance warning borders**: < 10 → red, < 30 → orange, < 50 → yellow,
   ≥ 50 → normal (dashed border of the tier colour; orange/yellow are kept
   visually distinct).
