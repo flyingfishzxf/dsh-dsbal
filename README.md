@@ -11,12 +11,13 @@ A DeepSeek API balance widget for the DSH web sidebar.
   cycle.
 - **Hover** opens a usage-notes card: the balance warning legend
   (< 50 yellow · < 30 orange · < 10 red → dashed border on the button), the
-  peak/off-peak definition (two rows: peak/off-peak hours), the refresh hint,
-  and the last refresh time.
+  peak/off-peak billing rule (two rows: peak/off-peak hours), and a merged
+  refresh rule + refresh time on one line.
 - **Peak/off-peak pricing hint**: periods are defined in Beijing time (peak
-  09:00-12:00 & 14:00-18:00, off-peak otherwise). A hollow badge sits at the
-  right of the balance — red 「梁文峰」 during peak, brand-blue 「梁文谷」 off-peak
-  (right-aligned, never wider than the sidebar).
+  09:00-12:00 & 14:00-18:00, off-peak otherwise; **weekends are off-peak all
+  day from 2026-08-23**). A hollow badge sits at the right of the balance —
+  red 「梁文峰」 during peak, brand-blue 「梁文谷」 off-peak (right-aligned, never
+  wider than the sidebar).
 - **Balance warning borders**: < 10 → red, < 30 → orange, < 50 → yellow,
   ≥ 50 → normal (dashed border of the tier colour; orange/yellow are kept
   visually distinct).
