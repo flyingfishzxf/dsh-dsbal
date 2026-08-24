@@ -51,8 +51,14 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
 
 - The **host half** registers a `dsBalance` Remote service. `fetch` resolves
   the DeepSeek API key through the credential seam (`DEEPSEEK_API_KEY` by
-  default) and calls `GET {baseURL}/user/balance` via `curl` — the `web.fetch`
-  seam cannot carry an `Authorization` header.
+  default) and calls `GET {baseURL}/user/balance` through the shell — the
+  `web.fetch` seam cannot carry an `Authorization` header:
+  - **POSIX**: `curl` with `${DEEPSEEK_API_KEY}` expansion.
+  - **Windows**: `node -e` (OpenSSL-based fetch). The sandboxed PowerShell
+    shell cannot complete any schannel TLS (curl and .NET both fail with
+    `SEC_E_NO_CREDENTIALS`), while Node's fetch is unaffected.
+  - The key and URL ride the shell spec's explicit `env` layer, so the secret
+    never appears in the command string or logs.
 - The **client half** mounts the Remote, renders the sidebar button and the
   hover card, and owns the refresh loop.
 
@@ -66,7 +72,7 @@ DeepSeek model adapter:
 
 ### Requirements
 
-- `curl` on the host (used to carry the Authorization header).
+- POSIX: `curl` on the host. Windows: `node` on the host.
 - A configured DeepSeek API key in DSH credentials.
 
 ## Publish to the plugin market

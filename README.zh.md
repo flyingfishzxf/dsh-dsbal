@@ -35,7 +35,10 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
 
 ## 工作原理
 
-- **宿主端**注册 `dsBalance` Remote 服务：`fetch` 通过凭据通道解析 DeepSeek API Key（默认 `DEEPSEEK_API_KEY`），用 `curl` 调用 `GET {baseURL}/user/balance`（`web.fetch` 无法携带 `Authorization` 头）。
+- **宿主端**注册 `dsBalance` Remote 服务：`fetch` 通过凭据通道解析 DeepSeek API Key（默认 `DEEPSEEK_API_KEY`），经 shell 调用 `GET {baseURL}/user/balance`（`web.fetch` 无法携带 `Authorization` 头）：
+  - **POSIX**：`curl`，使用 `${DEEPSEEK_API_KEY}` 展开。
+  - **Windows**：`node -e`（基于 OpenSSL 的 fetch）。沙箱化的 PowerShell 无法完成任何 schannel TLS（curl 与 .NET 均报 `SEC_E_NO_CREDENTIALS`），Node 的 fetch 不受影响。
+  - 密钥与 URL 均通过 shell spec 的显式 `env` 层传递，绝不出现在命令行或日志中。
 - **客户端**挂载 Remote、渲染侧边栏按钮与 hover 卡片，并负责刷新循环。
 
 ### 配置
@@ -47,7 +50,7 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
 
 ### 依赖
 
-- 宿主需要 `curl`（用于携带 Authorization 头）。
+- POSIX：宿主需要 `curl`；Windows：宿主需要 `node`。
 - DSH 凭据中需配置 DeepSeek API Key。
 
 ## 推送到插件市场
