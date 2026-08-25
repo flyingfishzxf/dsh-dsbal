@@ -37,7 +37,7 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
 
 - **宿主端**注册 `dsBalance` Remote 服务：`fetch` 通过凭据通道解析 DeepSeek API Key（默认 `DEEPSEEK_API_KEY`），经 shell 调用 `GET {baseURL}/user/balance`（`web.fetch` 无法携带 `Authorization` 头）：
   - **POSIX**：`curl`，使用 `${DEEPSEEK_API_KEY}` 展开。
-  - **Windows**：`node -e`（基于 OpenSSL 的 fetch）。沙箱化的 PowerShell 无法完成任何 schannel TLS（curl 与 .NET 均报 `SEC_E_NO_CREDENTIALS`），Node 的 fetch 不受影响。
+  - **Windows**：`node -e`（基于 OpenSSL 的 fetch）。沙箱化的 PowerShell 无法完成任何 schannel TLS（curl 与 .NET 均报 `SEC_E_NO_CREDENTIALS`），Node 的 fetch 不受影响。该请求显式以非受限方式运行（`danger-full-access`）：Windows ACL 沙箱在宽工作区部署下会失效（例如从主目录启动 `dsh web`），否则余额获取会依赖宿主的启动目录。命令是固定的、由插件自身构造（URL 来自设置、密钥来自凭据通道），因此安全；POSIX 保持受限模式。
   - 密钥与 URL 均通过 shell spec 的显式 `env` 层传递，绝不出现在命令行或日志中。
 - **客户端**挂载 Remote、渲染侧边栏按钮与 hover 卡片，并负责刷新循环。
 

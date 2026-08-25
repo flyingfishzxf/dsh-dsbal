@@ -56,7 +56,13 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
   - **POSIX**: `curl` with `${DEEPSEEK_API_KEY}` expansion.
   - **Windows**: `node -e` (OpenSSL-based fetch). The sandboxed PowerShell
     shell cannot complete any schannel TLS (curl and .NET both fail with
-    `SEC_E_NO_CREDENTIALS`), while Node's fetch is unaffected.
+    `SEC_E_NO_CREDENTIALS`), while Node's fetch is unaffected. The request
+    explicitly runs unconfined (`danger-full-access`): the Windows ACL sandbox
+    runner breaks for wide deployment workspaces (e.g. starting `dsh web` from
+    a home directory), which would otherwise make balance fetching depend on
+    the host's start directory. The command is fixed and plugin-authored (URL
+    from settings, key from credentials), so this is safe; POSIX stays
+    confined.
   - The key and URL ride the shell spec's explicit `env` layer, so the secret
     never appears in the command string or logs.
 - The **client half** mounts the Remote, renders the sidebar button and the
