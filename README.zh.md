@@ -2,7 +2,7 @@
 
 [English](./README.md)
 
-DSH Web 侧边栏的 DeepSeek API 余额插件。
+极简的 DeepSeek API 余额显示插件：只在 DSH Web 侧边栏显示一个数字，不做别的事。
 
 - 侧边栏底部**设置按钮上方**显示**人民币余额**（左侧钱包图标，右侧 `¥xx.xx`），与设置按钮对齐。
 - **30 秒自动刷新**；点击按钮立即手动刷新并重置自动周期。
@@ -53,6 +53,14 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
 - POSIX：宿主需要 `curl`；Windows：宿主需要 `node`。
 - DSH 凭据中需配置 DeepSeek API Key。
 
+## 局限
+
+- **只显示 DeepSeek API 余额**——即配置的 API Key（默认 `DEEPSEEK_API_KEY`）对应账户通过 `GET /user/balance` 查询的余额。不显示其他提供商或其他账户的余额，也无法合并或换算多个账户。
+- **只读**：仅展示余额，不含充值、密钥管理等操作。
+- 刷新间隔固定为 30 秒，不可配置。
+- 余额以人民币（CNY）显示（DeepSeek API 以 CNY 报告账户余额）。
+- 宿主依赖：POSIX 需要 `curl`，Windows 需要 `node`（见"依赖"）。
+
 ## 推送到插件市场
 
 目前尚未收录。插件列表由 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 维护，每个插件对应一个 YAML 文件。
@@ -62,7 +70,7 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
 1. 确保仓库满足要求：
    - 创建满 1 天；
    - 提交数 ≥ 10；
-   - 在 GitHub 仓库添加 `dsh-plugin` topic。
+   - 在 GitHub 仓库添加 `dsh-plugin` topic（仓库 **Settings → General → Topics**，CI 会检查）。
 2. Fork `awesome-dsh-plugin`。
 3. 新增 `data/plugins/flyingfishzxf__dsh-dsbal.yml`：
 
@@ -71,9 +79,11 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
    name: flyingfishzxf/dsh-dsbal
    category: ui
    description:
-     en: 'DeepSeek API balance sidebar widget for DSH Web — CNY balance above Settings, 30s auto refresh, click to refresh, hover details, threshold warnings.'
-     zh: 'DSH 侧边栏 DeepSeek 余额插件：设置按钮上方显示人民币余额，30 秒自动刷新，点击刷新，hover 查看明细，余额不足阈值告警。'
+     en: 'Shows the DeepSeek API account balance in the DSH Web sidebar with 30s auto-refresh, click-to-refresh, hover details, and low-balance threshold warnings.'
+     zh: '在 DSH Web 侧边栏显示 DeepSeek API 账户余额：30 秒自动刷新、点击刷新、悬停查看明细、余额不足阈值告警。'
    ```
+
+   市场描述只写功能、不带营销词（最高级会被打回）——"极简"定位写在本 README 里，不写进市场条目。
 
 4. 重新生成 README 并与 YAML 一起提交：
 

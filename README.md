@@ -2,7 +2,8 @@
 
 [中文](./README.zh.md)
 
-A DeepSeek API balance widget for the DSH web sidebar.
+A minimal, single-purpose DeepSeek API balance widget for the DSH web
+sidebar — it shows one number and nothing else.
 
 - Shows your **CNY balance** on a button in the sidebar footer, **above Settings**
   (wallet icon on the left, `¥xx.xx` on the right), aligned with the Settings
@@ -81,6 +82,18 @@ DeepSeek model adapter:
 - POSIX: `curl` on the host. Windows: `node` on the host.
 - A configured DeepSeek API key in DSH credentials.
 
+## Limitations
+
+- Shows **only the DeepSeek API balance** — the account behind the configured
+  key (`DEEPSEEK_API_KEY` by default), queried via `GET /user/balance`. It
+  does not show other providers' or other accounts' balances, and it cannot
+  combine or convert between accounts.
+- **Read-only**: it displays the balance and nothing else. No top-up, key
+  management, or billing operations.
+- The refresh interval is fixed at 30 seconds and is not configurable.
+- The balance is displayed in CNY, which is how the DeepSeek API reports it.
+- Host dependencies: `curl` on POSIX, `node` on Windows (see Requirements).
+
 ## Publish to the plugin market
 
 Not listed yet. The list is maintained in
@@ -92,7 +105,8 @@ To add this plugin:
 1. Make sure the repository meets the requirements:
    - at least 1 day old,
    - 10 or more commits,
-   - the `dsh-plugin` topic added on GitHub.
+   - the `dsh-plugin` topic added on GitHub (repo **Settings → General →
+     Topics**; CI checks it).
 2. Fork `awesome-dsh-plugin`.
 3. Add `data/plugins/flyingfishzxf__dsh-dsbal.yml`:
 
@@ -101,9 +115,13 @@ To add this plugin:
    name: flyingfishzxf/dsh-dsbal
    category: ui
    description:
-     en: 'DeepSeek API balance sidebar widget for DSH Web — CNY balance above Settings, 30s auto refresh, click to refresh, hover details, threshold warnings.'
-     zh: 'DSH 侧边栏 DeepSeek 余额插件：设置按钮上方显示人民币余额，30 秒自动刷新，点击刷新，hover 查看明细，余额不足阈值告警。'
+     en: 'Shows the DeepSeek API account balance in the DSH Web sidebar with 30s auto-refresh, click-to-refresh, hover details, and low-balance threshold warnings.'
+     zh: '在 DSH Web 侧边栏显示 DeepSeek API 账户余额：30 秒自动刷新、点击刷新、悬停查看明细、余额不足阈值告警。'
    ```
+
+   The market description must state what the plugin does without superlatives
+   (they get sent back) — the "minimal" positioning lives in this README, not
+   in the market entry.
 
 4. Regenerate the READMEs and commit them along with the YAML file:
 
