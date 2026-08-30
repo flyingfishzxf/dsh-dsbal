@@ -77,7 +77,7 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
    ```yaml
    url: https://github.com/flyingfishzxf/dsh-dsbal
    name: flyingfishzxf/dsh-dsbal
-   category: ui
+   category: usage
    description:
      en: 'Shows the DeepSeek API account balance in the DSH Web sidebar with 30s auto-refresh, click-to-refresh, hover details, and low-balance threshold warnings.'
      zh: '在 DSH Web 侧边栏显示 DeepSeek API 账户余额：30 秒自动刷新、点击刷新、悬停查看明细、余额不足阈值告警。'
