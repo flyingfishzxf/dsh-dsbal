@@ -10,10 +10,20 @@ sidebar — it shows one number and nothing else.
   button.
 - **30s auto refresh**; click the button to refresh immediately and reset the
   cycle.
-- **Hover** opens a usage-notes card: the balance warning legend
+- **Hover** opens a usage-notes card: the current balance in large type
+  (`¥xx.xx`) at the top, then the balance warning legend
   (< 50 yellow · < 30 orange · < 10 red → dashed border on the button), the
   peak/off-peak billing rule (two rows: peak/off-peak hours), and a merged
-  refresh rule + refresh time on one line.
+  refresh rule + refresh time on one line, with the plugin version
+  (`dsh-dsbal v0.4.0`) right-aligned at the bottom. The card **tracks the
+  button width**: as wide as the button column when the sidebar is expanded
+  (capped at 360px), a fixed 240px when collapsed, following live while the
+  sidebar animates.
+- **Collapsed sidebar**: the button shrinks to a 36px circle with no room for
+  the amount or the badge, so peak/off-peak moves onto the **icon colour**
+  (red `#e5484d` during peak, brand blue `#4d6bfe` off-peak) and the exact
+  amount is read from the top of the hover card. Expanded, the icon stays
+  neutral and the 梁文峰/梁文谷 pill alone carries the state.
 - **Peak/off-peak pricing hint**: periods are defined in Beijing time (peak is
   **Monday–Friday** 09:00-12:00 & 14:00-18:00; every other hour, **weekends in
   full** (including make-up workdays) and **Chinese statutory holidays in full**
