@@ -14,11 +14,16 @@ sidebar — it shows one number and nothing else.
   (< 50 yellow · < 30 orange · < 10 red → dashed border on the button), the
   peak/off-peak billing rule (two rows: peak/off-peak hours), and a merged
   refresh rule + refresh time on one line.
-- **Peak/off-peak pricing hint**: periods are defined in Beijing time (peak
-  09:00-12:00 & 14:00-18:00, off-peak otherwise; **weekends are off-peak all
-  day from 2026-08-23**). A hollow badge sits at the right of the balance —
-  red 「梁文峰」 during peak, brand-blue 「梁文谷」 off-peak (right-aligned, never
-  wider than the sidebar).
+- **Peak/off-peak pricing hint**: periods are defined in Beijing time (peak is
+  **Monday–Friday** 09:00-12:00 & 14:00-18:00; every other hour, **weekends in
+  full** (including make-up workdays) and **Chinese statutory holidays in full**
+  are off-peak at half the peak price). A hollow badge sits at the right of the
+  balance — red 「梁文峰」 during peak, brand-blue 「梁文谷」 off-peak
+  (right-aligned, never wider than the sidebar). The holiday table is fetched
+  silently in the browser from
+  [holiday-cn](https://github.com/NateScarlet/holiday-cn) (jsDelivr, then GitHub
+  raw), cached in `localStorage` for 24h, and falls back to the bundled
+  2025/2026 table when offline or not yet fetched.
 - **Balance warning borders**: < 10 → red, < 30 → orange, < 50 → yellow,
   ≥ 50 → normal (dashed border of the tier colour; orange/yellow are kept
   visually distinct).
