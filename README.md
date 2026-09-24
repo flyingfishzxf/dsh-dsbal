@@ -15,7 +15,7 @@ sidebar — it shows one number and nothing else.
   (< 50 yellow · < 30 orange · < 10 red → dashed border on the button), the
   peak/off-peak billing rule (two rows: peak/off-peak hours), and a merged
   refresh rule + refresh time on one line, with the plugin version
-  (`dsh-dsbal v0.4.0`) right-aligned at the bottom. The card **tracks the
+  (`dsh-dsbal v0.4.1`) right-aligned at the bottom. The card **tracks the
   button width**: as wide as the button column when the sidebar is expanded
   (capped at 360px), a fixed 240px when collapsed, following live while the
   sidebar animates.
@@ -96,6 +96,10 @@ DeepSeek model adapter:
 
 - POSIX: `curl` on the host. Windows: `node` on the host.
 - A configured DeepSeek API key in DSH credentials.
+- DSH host compatibility: the host half uses the current
+  `shell.execute(...).result()` execution surface and the `settings.describe()`
+  section lookup, and falls back to the pre-0.1.7 `shell.run()` /
+  `settings.get()` APIs, so one bundle keeps working across that host update.
 
 ## Limitations
 
