@@ -15,10 +15,16 @@ sidebar — it shows one number and nothing else.
   (< 50 yellow · < 30 orange · < 10 red → dashed border on the button), the
   peak/off-peak billing rule (two rows: peak/off-peak hours), and a merged
   refresh rule + refresh time on one line, with the plugin version
-  (`dsh-dsbal v0.4.1`) right-aligned at the bottom. The card **tracks the
+  (`dsh-dsbal v0.4.3`) right-aligned at the bottom. The card **tracks the
   button width**: as wide as the button column when the sidebar is expanded
   (capped at 360px), a fixed 240px when collapsed, following live while the
   sidebar animates.
+- **Balance breakdown**: while *both* the topped-up and the granted wallet
+  carry credit, two ledger rows sit under the total — 充值余额 (topped-up) and
+  赠送余额 (granted), the same wording the official Settings → Account page
+  uses. They only restate the total when one of the two is empty, so with a
+  single funded wallet the card keeps its current single-amount form; the total,
+  the button and the warning tier never change.
 - **Collapsed sidebar**: the button shrinks to a 36px circle with no room for
   the amount or the badge, so peak/off-peak moves onto the **icon colour**
   (red `#e5484d` during peak, brand blue `#4d6bfe` off-peak) and the exact
