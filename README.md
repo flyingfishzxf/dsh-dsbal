@@ -65,9 +65,9 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
 
 ## How it works
 
-- The **host half** registers a `dsBalance` Remote service. `fetch` resolves
-  the DeepSeek API key through the credential seam (`DEEPSEEK_API_KEY` by
-  default) and calls `GET {baseURL}/user/balance` through the shell — the
+- The **host half** registers a `dsBalance` Remote service. `fetch` first
+  resolves the DeepSeek API key through the credential seam (`DEEPSEEK_API_KEY`
+  by default) and calls `GET {baseURL}/user/balance` through the shell — the
   `web.fetch` seam cannot carry an `Authorization` header:
   - **POSIX**: `curl` with `${DEEPSEEK_API_KEY}` expansion.
   - **Windows**: `node -e` (OpenSSL-based fetch). The sandboxed PowerShell
@@ -81,21 +81,33 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
     confined.
   - The key and URL ride the shell spec's explicit `env` layer, so the secret
     never appears in the command string or logs.
+- With **no API key configured**, the balance comes from the **DeepSeek account
+  seam** instead: `deepseekAccount.getBalance()` asks the Platform for the same
+  recharge and granted wallets the official Settings → Account page shows. This
+  is what makes the plugin work on the DSH desktop app, which signs in to the
+  DeepSeek account Platform (OAuth) and stores no `DEEPSEEK_API_KEY` at all — the
+  key-only path could there only report "API key not configured". The account
+  path runs in-process, so it needs no shell, no `curl`/`node`, no TLS and no
+  sandbox. A configured API key still takes precedence, so existing installs are
+  unaffected.
 - The **client half** mounts the Remote, renders the sidebar button and the
   hover card, and owns the refresh loop.
 
 ### Configuration
 
 The plugin honours the `llm-deepseek` settings section, exactly like the
-DeepSeek model adapter:
+DeepSeek model adapter. That section is keyed by Loader entry id on current
+hosts (`include:llm-deepseek`), so the lookup accepts both the entry id and the
+bare namespace:
 
 - `apiKeyEnv` — credential reference (default `DEEPSEEK_API_KEY`).
 - `baseURL` — API base (default `https://api.deepseek.com`).
 
 ### Requirements
 
-- POSIX: `curl` on the host. Windows: `node` on the host.
-- A configured DeepSeek API key in DSH credentials.
+- POSIX: `curl` on the host. Windows: `node` on the host (API-key path only).
+- Either a configured DeepSeek API key in DSH credentials, **or** a signed-in
+  DeepSeek account (what the desktop app has).
 - DSH host compatibility: the host half uses the current
   `shell.execute(...).result()` execution surface and the `settings.describe()`
   section lookup, and falls back to the pre-0.1.7 `shell.run()` /
@@ -103,15 +115,17 @@ DeepSeek model adapter:
 
 ## Limitations
 
-- Shows **only the DeepSeek API balance** — the account behind the configured
-  key (`DEEPSEEK_API_KEY` by default), queried via `GET /user/balance`. It
-  does not show other providers' or other accounts' balances, and it cannot
-  combine or convert between accounts.
+- Shows **only the DeepSeek balance** — the account behind the configured key
+  (`DEEPSEEK_API_KEY` by default), queried via `GET /user/balance`; with no key
+  configured, the balance of the signed-in account, queried through the account
+  Platform. It does not show other providers' or other accounts' balances, and
+  it cannot combine or convert between accounts.
 - **Read-only**: it displays the balance and nothing else. No top-up, key
   management, or billing operations.
 - The refresh interval is fixed at 30 seconds and is not configurable.
-- The balance is displayed in CNY, which is how the DeepSeek API reports it.
-- Host dependencies: `curl` on POSIX, `node` on Windows (see Requirements).
+- The balance is displayed in CNY, which is how DeepSeek reports it.
+- Host dependencies: `curl` on POSIX, `node` on Windows for the API-key path
+  (see Requirements); the account path has none.
 
 ## Publish to the plugin market
 

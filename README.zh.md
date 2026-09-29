@@ -36,32 +36,33 @@ dsh plugin --profile web add file:/path/to/dsh-dsbal
 
 ## 工作原理
 
-- **宿主端**注册 `dsBalance` Remote 服务：`fetch` 通过凭据通道解析 DeepSeek API Key（默认 `DEEPSEEK_API_KEY`），经 shell 调用 `GET {baseURL}/user/balance`（`web.fetch` 无法携带 `Authorization` 头）：
+- **宿主端**注册 `dsBalance` Remote 服务：`fetch` 先通过凭据通道解析 DeepSeek API Key（默认 `DEEPSEEK_API_KEY`），经 shell 调用 `GET {baseURL}/user/balance`（`web.fetch` 无法携带 `Authorization` 头）：
   - **POSIX**：`curl`，使用 `${DEEPSEEK_API_KEY}` 展开。
   - **Windows**：`node -e`（基于 OpenSSL 的 fetch）。沙箱化的 PowerShell 无法完成任何 schannel TLS（curl 与 .NET 均报 `SEC_E_NO_CREDENTIALS`），Node 的 fetch 不受影响。该请求显式以非受限方式运行（`danger-full-access`）：Windows ACL 沙箱在宽工作区部署下会失效（例如从主目录启动 `dsh web`），否则余额获取会依赖宿主的启动目录。命令是固定的、由插件自身构造（URL 来自设置、密钥来自凭据通道），因此安全；POSIX 保持受限模式。
   - 密钥与 URL 均通过 shell spec 的显式 `env` 层传递，绝不出现在命令行或日志中。
+- **未配置 API Key 时走 DeepSeek 账号通道**：DSH 桌面版用开放平台账号登录（OAuth），凭据里并没有 `DEEPSEEK_API_KEY`，只有 API Key 的取数路径会一直报「未配置 API Key」。因此在没有 API Key 的情况下，余额改由 `deepseekAccount.getBalance()` 直接向开放平台查询——与官方「设置 → 账号」页显示的充值/赠送钱包同源，且不经过 shell、不涉及 TLS 与沙箱。桌面版因此无需配置 API Key 即可显示余额；已配置 API Key 时仍优先使用 Key，行为不变。
 - **客户端**挂载 Remote、渲染侧边栏按钮与 hover 卡片，并负责刷新循环。
 
 ### 配置
 
-与 DeepSeek 模型适配器一致，插件尊重 `llm-deepseek` 设置段：
+与 DeepSeek 模型适配器一致，插件尊重 `llm-deepseek` 设置段（该段以 Loader 条目 id 暴露，如 `include:llm-deepseek`，插件的查找同时接受裸命名空间与条目 id 两种写法）：
 
 - `apiKeyEnv` — 凭据引用（默认 `DEEPSEEK_API_KEY`）。
 - `baseURL` — API 基地址（默认 `https://api.deepseek.com`）。
 
 ### 依赖
 
-- POSIX：宿主需要 `curl`；Windows：宿主需要 `node`。
-- DSH 凭据中需配置 DeepSeek API Key。
+- POSIX：宿主需要 `curl`；Windows：宿主需要 `node`（仅在走 API Key 通道时需要）。
+- 凭据中配置了 DeepSeek API Key，**或**已在 DSH 中登录 DeepSeek 开放平台账号（桌面版即属于后者）。
 - DSH 宿主兼容性：宿主端使用当前的 `shell.execute(...).result()` 执行接口与 `settings.describe()` 读取配置节，并回退到 0.1.7 之前的 `shell.run()` / `settings.get()`，因此同一份插件在宿主升级前后都能工作。
 
 ## 局限
 
-- **只显示 DeepSeek API 余额**——即配置的 API Key（默认 `DEEPSEEK_API_KEY`）对应账户通过 `GET /user/balance` 查询的余额。不显示其他提供商或其他账户的余额，也无法合并或换算多个账户。
+- **只显示 DeepSeek 余额**——即配置的 API Key（默认 `DEEPSEEK_API_KEY`）对应账户通过 `GET /user/balance` 查询的余额，或在未配置 Key 时当前登录账号的开放平台余额。不显示其他提供商或其他账户的余额，也无法合并或换算多个账户。
 - **只读**：仅展示余额，不含充值、密钥管理等操作。
 - 刷新间隔固定为 30 秒，不可配置。
-- 余额以人民币（CNY）显示（DeepSeek API 以 CNY 报告账户余额）。
-- 宿主依赖：POSIX 需要 `curl`，Windows 需要 `node`（见"依赖"）。
+- 余额以人民币（CNY）显示（DeepSeek 以 CNY 报告账户余额）。
+- 宿主依赖：API Key 通道在 POSIX 需要 `curl`、在 Windows 需要 `node`（见"依赖"）；账号通道无额外依赖。
 
 ## 推送到插件市场
 
